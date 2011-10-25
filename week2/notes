@@ -1,0 +1,300 @@
+Bayes network:
+
+0.5 * 0.9
+0.5 * 0.2
+
+0.45 + 0.1 = 0.55
+
+P(Y) = sum for i P(Y | X=i) P(X=i)
+
+P( !X | Y) = 1 - P(X | Y)
+
+BUT
+
+*WRONG* P (X | !Y) = 1 - P(X | Y)
+
+D1 0.9 * 0.8 = 0.72
+   0.1 * 0.6 = 0.06
+
+   0.78 * 0.8 = 0.624
+   0.22 * 0.6 = 0.132
+                0.756
+
+P(A|B) = P(B|A) . P(A)
+         -------------
+            P(B)
+
+posterior = likelihood . prior
+            ------------------
+            marginal likelihood
+
+P(B) = sum for a of P(B|A=a) P(A=a)  { total probability }
+
+P(C|+) = P(+|C) . P(C)
+         -------------
+            P(+)
+
+            = 0.9  .  0.01
+              ------------
+                (0.9 . 0.01) + (0.2 . 0.99)
+
+            = 0.009
+            --------
+            0.009 + 0.198    -> 0.0434
+
+
+    P(+|C)  = 0.009
+    P(+|!C) = 0.198
+
+    = 0.009 / (0.009 + 0.198)
+
+P (!A|B) = P(B|!A) (P!A)
+           -------------
+              P(B)
+
+ so
+    P(A|B) + (P!A|B) = 1
+    so
+
+    "P'" is a pseudo-probability (not-normalized)
+    P'( A|B) = P(B| A) P( A)   =>  P(A |B) = eta P'( A|B)
+    P'(!A|B) = P(B|!A) P(!A)   =>  P(!A|B) = eta P'(!A|B)
+
+       eta = (P'(A|B) + P'(!A|B)) ^-1
+
+    P(C | T1=+, T2=+) = P(C|++) = ...
+
+    P(C)    = 0.01  P(!C)   = 0.99
+    P(+|C)  = 0.9   P(-|C)  = 0.1
+    P(-|!C) = 0.8   P(+|!C) = 0.2
+
+    P(C|++) = eta P'(C|++)
+       eta = (P'(C|++) + P'(!C|++)) ^-1
+       P'(C |++) = P(++|C)  . P(C)
+       P'(!C|++) = P(++|!C) . P(!C)
+
+Nice mathematical phrasing of conditional independence:
+
+    P(T2 | C, T1) = P(T2 | C)   i.e. T1 makes no difference
+
+=====
+
+
+P(T2=+ | T1=+)
+
+P( T2=+ | T1=+, C) . P(C|T1=+)    +   P( T2=+ | T1=+, !C) . P(!C | T1=+)
+
+because of conditional independence, we can simplify to
+
+P( T2=+ | C)        . P(C|T1=+)    +   P( T2=+ | !C)      . P(!C | T1=+)
+
+   0.9              0.0434                0.2             0.9565
+
+WHAT THE FUCK?  WHERE DID week2 vid 27 Explaining away come from?
+P(R|H,S)
+
+http://www.aiqus.com/questions/3450/326-explaining-away-about-bayes-rule
+helps
+
+P(R|H) = P(H|R) * P(R) / P(H)
+but we also had S!
+so...
+P(R|H,S) = P(H|R,S) * P(R|S) / P(H|S)
+(but how do you know that this transformation is valid?!!!)
+
+TODO: read "extended version of Bayes rule, conditionalized on some background evidence". See equation 13.13 on page 496
+
+P(R|H,S) = P(H|R,S) * P(R|S) / P(H|S)
+
+    = 1 * 0.01  / (1.7 / 2.7)
+
+  Independence does NOT imply Conditional independence
+
+Q.30
+P(A) . P(B|A) . P(C|A) . P(D|A) . P(E|B) . P(F|C,D)
+1       2         2         2       2        4
+
+any variable that has K inputs requires 2^K variables
+
+Q.31
+P(A) P(B) P(C) P(D|A,B,C) P(E|D) P(F|D) P(G|D,C)
+1     1     1     8         2       2     4
+
+Q.32
+BA AB FB = 3
+BD|BA NC|AB,FB = 6
+BM|BD BF|BD,NC  NO  NG  FLB  SB = 2 + 4 + 1+1+1+1 = 10
+L|BF OL|BF,NO GG|BF,NG CWS|BF,NG,FLB,SB DS|NO = 2+4+4+16+2 = 28
+
+= 
+
+D-Separation: reachability
+
+(#) is known
+Active triplets       Inactive Triplets
+()->()->()              ()->(#)->()
+
+    ()     versus    (#)
+   /  \             /  \
+  ()  ()           ()   ()
+
+  ()  ()           ()    ()
+   \  /             \   /
+    (#)              ()
+
+  ()  ()
+   \  /
+    ()
+     | ... a successor
+    (#)
+
+
+Probabilistic inference
+=======================
+
+    B      E
+     \    /
+        A
+      /  \
+    J      M
+
+Evidence (what we know)
+Hidden   (we computer with it)
+Query    (what we want to find out)
+
+The answer will be a probability distribution
+
+
+P(Q1,Q2,...|E1=e1,E2=e2,...)
+
+we could also ask:
+
+argmax P(Q1=q1,Q2=q2,...|E1=e1,...)  # i.e. what's the most likely 
+                                     # thing that could happen
+
+Bayes nets can go in both directions (e.g. like Prolog) not just in a single
+direction. e.g. we can query B/E instead of J/M
+
+Q1: what's hidden/evidence/query?
+Mary has called to report that Alarm is going off.  
+We want to know if there's been a burglary.
+... huh, A is Hidden?  But he said "to tell us that the alarm has gone off"
+
+P(Q|E) = P(Q,E) / P(E)
+
+Notation: P(E=true) = P(+e) = 1-P(!e)
+
+sum[e] sum[a] P(+b, +j, +m, e,a)
+=
+sum[e] sum[a] P(+b) (P(e) P(a|+b,e) P(+j|a) P(+m|a)
+    (i.e. plugging the variable/evidence values into the Bayes network,
+    with each node being dependent only on its input arcs)
+
+    if this product is f(e,a), then the whole value is the sum of
+    f(e,a) for all values of e and a
+
+    i.e.   f(+e,+a) + f(+a,!e), + f(!e,+a) + f(!e,!a)
+
+Causal direction.
+
+Inference by enumeration
+
+Optimisations.
+====
+factoring out: moving constants to the left, moving parts of sum to left of where they're not needed, etc.
+ordering in causal direction (to maximise independence)
+variable elimination
+    - joining factors
+    - 
+
+Approximate inference by sampling (i.e. empirical sample)
+- useful if we don't know the actual probability tables
+
+Sampling method is "consistent"
+can be used to compute a single probability, or whole joint probability
+"rejection sampling" (just remove the samples that we don't care about)
+but spend lots of time rejecting samples.
+
+So...
+"Likelihood weighting".  Allows us to generate only good samples.
+We "fix" the evidence variables.
+But... resulting samples would be inconsistent.
+So we have to weigh  up the samples
+e.g. we add the probability that the constrained item would have been chosen
+to a "weight".  And multiply each row by that weight.
+Weighted likelihood sampling is then "consistent".
+
+Gibbs Sampling
+Markov Chain Monte Carlo = MCMC
+adjacent samples vary in only one variable.  
+(amazingly, this is also consistent)
+
+HOMEWORK
+
+P(A)=0.5
+P(B|A)  = 0.2
+P(B|!A) = 0.8
+
+P(A|B) = ???
+
+P(A|B) = P(B|A) * P(A)     =  0.2  *  0.5
+         -------------        -----------
+            P(B)              (0.5*0.2) + (0.5*0.8) (i.e P(B)= 0.5 )
+
+so... P(A|B) = 0.2
+
+Check again by working backwards:
+P(B|A) = P(A|B) * P(B)   = 0.2 * 0.5  = 0.2 yes
+         -------------     ---------
+            P(A)               0.5
+
+
+
+Question 2
+P(R|H,S) = P(H|R,S) * P(R|S) / P(H|S)
+
+i)   P(A|X1,X2,!X3) = P(X1|A,X2,!X3) * P(A|X2,!X3) / P(X1|X2,!X3)
+ii)  P(A|X2,!X3) = P(X2|A,!X3) * P(A|!X3) / P(X2|!X3)
+iii) P(A|!X3) = P(!X3|A) * P(A) / P(!X3)
+
+in iii) P(A|!X3) = 0.8 * 0.5 / P(!X3)
+    P(!X3) = 0.5*0.8 + 0.5*0.4 = 0.6
+     so P(A|!X3) = 0.8*0.5 / 0.6 = 0.4/0.6A = 2/3
+
+in ii) P(A|X2,!X3) 
+    well, P(X2|A,!X3) = P(X2|A) because X2 and !X3 are independent given A
+        so P(X2|A) * 2/3  / P(X2|!X3)... seems a bit of a faff
+
+let's try again
+P(A|X1,X2,!X3) = P(X1,X2,!X3 | A) * P(A)
+                 -----------------------
+                    P(X1,X2,!X3)
+
+so, 
+P(X1,X2,!X3|A) = 0.032 = 0.5*(0.2*0.2*0.8)
+P(A) = 0.5
+P(X1,X2,!X3) = 0.5*(0.2*0.2*0.8) + 0.5*(0.6*0.6*0.4) = 0.176
+
+so     0.032 * 0.5 / 0.176
+
+If that's true then:
+
+P(X1,X2,!X3|A) = 0.090909091 * 0.032 / 0.5
+
+====
+#3
+
+P(X3|X1)
+
+#4     A
+      / \
+     B   C
+      \ /
+       D
+
+B_|_C
+B_|_C | D
+B_|_C | A
+B_|_C | A,D
+
+1+1+2+4+8 =  16
