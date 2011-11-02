@@ -85,13 +85,371 @@ I'm assuming "spam" and "ham" are the classes?  Yup, looks like!
 P(spam) = 3+1 / 8+2 = 4/10 = 2/5
 P(ham)  = 5+1 / 10  = 6/10 = 3/5
 
-P(today|SPAM) = 0+1 / 9+12  = 1/21
+P(today|spam) = 0+1 / 9+12  = 1/21
 P(today|ham)  = 2+1 / 15+12 = 3/27
 
 ==========
 
 #5.16
-M="today is secret"
+P(Spam|M="today is secret")
 
-P(
+P("today" | spam) = 1/21
+P("is"    | spam) = 2/21
+P("secret"| spam) = 4/21
+P(M|spam) = 1/21 * 2/21 * 4/21 = 8/9261
+
+P("today" | ham) = 3/27
+P("is"    | ham) = 2/27
+P("secret"| ham) = 2/27
+P(M|ham) = 3/27 * 2/27 * 2/27 = 4/6561
+
+P(M) = 8/9261 * 2/5   + 4/6561 * 3/5 = 2668/3750705
+
+P(Spam|M="today is secret") 
+    = P(M|Spam) * P(Spam)
+        ----
+        P(M)
+= 324/667
+
+----
+5.23, 5.24   eeeek!
+What is "LOSS" ?
+TODO: come back to this to look at steps of calculation for derivatives
+re: W0, W1.
+
+Formulae in textbook
+
+   W0 = 1/M * Sum Yi  - W1/M * Sum Xi
+
+   W1 =    M * Sum (Xi*Yi) -   Sum Xi * Sum Yi
+           ----------------------------------
+           M * Sum Xi^2  - (Sum Xi)^2
+
+M is the number of training examples:
+
+X  |   Y
+---------
+3      0
+6     -3
+4     -1
+5     -2
+
+(W0 = 3, W1 = -1).  The formulae can be used to calculate this.
+
+Sum Xi = 3+6+4+5           = 18
+Sum Yi = 0 + -3 + -1 + -2  = -6
+Sum (Xi Yi) = 0 + -18 + -4 + -10  = -32
+W0 = 1/4 * -6   -  W1/4  * 18
+W1 = 4 * (-32)   - (18 * -6)           -20
+     --------------------------  =     ---
+     4 * (9 +36+16+25)  - 18^2          20
+
+W0 = 1/4 * -6   -  -1/4  * 18   = 3
+
+X  Y
+2  2
+4  5
+6  5
+8  8
+
+Sum Xi = 2+4+6+8 = 20
+Sum Yi = 2+5+5+8 = 20
+Sum Xi Yi = 4+20+30+64 = 118
+
+   W1 =    4 * 118 -   20 * 20         472 - 400
+           --------------------  =     ----------
+           4 * 120  - 400              480 - 400
+
+           = 72/80 = 9/10
+
+   W0 = 1/4 * 20 - (9/10)/4 * 20 = 5 - 4.5 = 1/2
+
+
+f(x) = W1 x + W0
+
+f(2) = 2.3
+f(4) = 4.1
+f(6) = 5.9
+f(8) = 7.7
+
+#5.25 Logistic regression
+
+f(x)   Z =  1/ (1+ e^-f(x))
+Range Z given *any* linear function
+
+        1 / 1+ e^(-fx)
+
+        e^(-f(x)) will range from e^-Inf (0) and e^Inf (Inf)
+
+        1/1+0 =1   and 1/1+Inf =~ 0
+
+        so the range is ]0..1[
+
+#5.26 Regularization
+ 
+   Loss = Loss(data) + Loss(parameters)
+
+   Sum_j (Yi - W0 * Xi -W0)^2 + Sum_i (Wi)^p
+   p = 1, p = 2
+
+   L1 / L2 give diamond shaped, or circular shapes around 0,0 point
+
+Gradient Descent:
+    W0
+    Wi+1 <- wi - alpha D(w)L(Wi)
+
+    (where alpha is a "learning grade", i.e. a small corrective number, like
+    0.01)
+
+    term "Local minimum": be careful of local, as opposed to global 
+    minima/maxima (see books for more explanation of algorithms to
+    optimize and guard against this)
+
+    => Gradient Descent functions
+    delta = gradient (cp dy/dx from vaguely remembered school classes
+    on differentiation)
+
+Perceptron
+#5.33  Maximum Margin Algorithms
+ Support Vector Machines,  Boosting  (big in ML stuff)
+ "Kernel Trick" - rewrite a circle of training examples into a linear example
+
+Let's skip Unit 6 Unsupervised learning for now, and look at homework...
+
+HW 3.1 Naive Bayes
+
+LS(k) P(x) = count(x) + k
+
+MOVIE:
+    A perfect world
+    My Perfect Woman
+    Pretty Woman
+
+SONG:
+    A perfect day
+    Electric Storm
+    Another Rainy Day
+
+    P(movie)
+3 movies, 6 examples:    3+1 / 6+2 = 4/8 = 0.5
+3 songs, 6 examples:     3+1 / 6+2 = 4/8 = 0.5
+
+Now, we take each word in vocabulary as the class
+A perfect world my woman pretty day electric storm another rainy = 11
+P("Perfect" | Movie) = 2+1 / 8 + 11 = 3/19
+P("Perfect" | Song) = 1+1  / 8 + 11 = 2/19
+
+P("Storm" | Movie) = 0+1 / 8 + 11  = 1/19
+P("Storm" | Song)  = 1+1  / 8 + 11 = 2/19
+
+HW 3.2
+
+
+Let's just remember Bayes theorem:
+P(A|B) = P(B|A) . P(A)
+         -------------
+             P(B)
+
+P(movie|"Perfect Storm")
+= P("Perfect Storm" | Movie) * P(movie)
+    --------------------------
+        P("Perfect Storm")
+
+
+P(movie) = 0.5
+
+  P("Perfect"|Movie) * P("Storm"|Movie) * 0.5
+  ----------------------------------
+    P("PS"|Movie) + P("PS"|Storm)
+
+    = 3/19 * 1/19 * 0.5
+      -----------------
+        P("PS")
+
+ P(PS) =  3/19 * 1/19 * 1/2   # P(PS|Movie)  = 3/722
+        + 2/19 * 2/19 * 1/2   # P(PS|Song)   = 4/722
+       = 7/722
+
+    so whole thing = 
+
+        3/19*1/19*1/2      3/722      3/7
+        -------------  =   -----  = 
+            7/722          7/722
+
+HW 3.3 seems to be a trick question (0)
+
+HW 3.4 er, no
+
+HW 3.5, let's revise w0/w1...
+
+   W0 = 1/M * Sum Yi  - W1/M * Sum Xi
+
+   W1 =    M * Sum (Xi*Yi) -   Sum Xi * Sum Yi
+           ----------------------------------
+           M * Sum Xi^2  - (Sum Xi)^2
+
+   X    Y
+   0    3
+   1    6
+   2    7
+   3    8
+   4   11
+
+So...
+
+    M = 5 (number of training examples)
+
+    W0 =  1/5  *  (3+7+7+8+11) -  W1/5 * (0+1+2+3+4)
+
+    W1 =    5 * 88     -   10 * 35
+          ------------------------------------------
+            5 * 30     -   10 ^ 2
+
+        =  440   - 350
+           -----------  =  90 / 50 = 9/5 = 1.8
+           150  - 100
+
+Given I keep on making stupid mistakes, I wrote a simple haskell program
+to sort this out
+
+-----
+Unsupervised learning:
+
+Parameters of a Gaussian:
+
+Mu      (the mean)
+Sigma^2 (the variance)
+
+f(X|mu, sigma^2) =       1                  -(x - Mu)^2
+                  ----------------   exp    ----------
+                sqrt( 2 pi sigma^2)         2 sigma^2
+
+Fitting data to gaussians.  "Easy formulas"
+
+Mu is the average data points: e.g. sum of data points divided by number thereof
+    M data points
+Mu = 1/M * Sum(j=1,M) Xg
+
+Sigma^2 = 1/M Sum(j=1,M) (Xj-Mu)^2 
+
+Mu = average, Sigma^2 is average quadratic deviation.
+
+Video 6.11.  huh.  maximizing log expressions?
+
+TODO: look up "derivative", "chain rule", "maximizing"
+
+Question:
+3,4,5,6,7:  what's the mean?
+
+Mu = 1/M * Sum (Xi)
+
+    1/5 * (3+4+5+6+7)
+    = 1/5 * 25 = 5
+
+Sigma = 1/5 * Sum ( 
+    (3-5)^2 = 4
+    (4-5)^2 = 1
+    (5-5)^2 = 0
+    (6-5)^2 = 1
+    (7-5)^2 = 4
+
+    =10 / 5 = 4
+
+3,9,9,3:
+    1/4 * (3+9+9+3) = 
+    1/4 * 24 = 24/4 = 6
+
+S = 1/4 *   (3-6)^2 + (9-6)^2 + (9-6)^2 + (3-6)^2
+
+= (9 + 9 + 9 + 9) / 4 = 9
+
+Eeeek!  Multivariate data!
+
+We generalize the formulas:
+
+Mu = 1/M * Sum_i Xi
+Sigma = 1/M * Sum_i (Xi-Mu)^2 (Xi - Mu)
+
+Mu = 1/5 * (25 25) = (5 5)
+
+Sigma = 1/M Sum_i (Xi-Mu)T (Xi-Mu)
+
+    = 1/M * (
+        f( [3 8] )
+        f( [4 7] )
+        f( [5 5] )
+        f( [6 3] )
+        f( [7 2] )
+
+
+    = 1/5 * (
+        [3 8]-[5 5] = [-2 3] so [-2 3] * [-2 3]T = 
+            [-2 3][-2
+                    3]
+              = [4 -6
+                -6  9]
+        [4 7]-[5 5] = [-1 2][-1
+                              2]
+                    = [1 -2
+                      -2 4]
+         [5 5]-[5 5] = [0 0] [0 0]T = 
+                      [0 0
+                       0 0]
+         [6 3]-[5 5] = [1 -2][1
+                             -2]
+                     = [1 -2
+                       -2  4]
+         [7 2]-[5 5] = [2 -3][2
+                             -3]
+                    = [4 -6
+                      -6  9]
+
+           sum those matrices =
+
+            [ 4+1+0+1+4    -6-2+0-2-6 ]
+             -6-2+0-2-6    9+4+0+4+9 ]
+
+             = [ 10   -16
+                 -16   26 ]
+
+                / 5 = 
+
+                [2  -3.2
+               -3.2  5.2]
+
+Woot! (except for the obvious calculation errors... Must Be More Careful!)
+
+EM: Expectation Maximization
+
+P(x) = Sum(i=1 for K) p(C=i) * P(x|C=i)
+                       ^        ^
+                       |        gaussian attached to cluster centre
+                       |        (Mu i Sigma i)
+                       |
+                     the prior probability
+                     (fixed probability)
+
+E-step: Assume we know PIi Mui Sum_i
+
+M Step.  Work out what parameter should be
+
+    (not sure I'm transcribing the funny symbols right here!)
+    (Should just read these out of the book...)
+        PIi <-  Sum_j eij / M
+        MUi <-  Sum_a eij Xj / Sigma eij
+       SIGMAi <- ...
+       meh.
+
+same calculation as before, but weighted to each data point.
+(soft correspondance)
+
+Eeeek!  Eigenvectors!
+
+Dimensionality
+Wow, 5.25 is rather cool (Scan example)
+
+
+
+                 
+
 
