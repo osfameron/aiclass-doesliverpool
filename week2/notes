@@ -281,6 +281,23 @@ If that's true then:
 
 P(X1,X2,!X3|A) = 0.090909091 * 0.032 / 0.5
 
+GOT THIS ONE WRONG!
+Let's try again (having watched the explanation, but not understood it)
+
+P(A| X1, X2, !X3) = P(X1,X2,!X3 | A) * P(A)
+                    -----------------------
+                        P(X1, X2, !X3)
+
+OK, no idea... so...
+Thrun says...
+
+P(A| X1, X2, !X3) = P(!X3 | A,X1,X2) P(A|X1,X2)
+                    -----------------
+                        P(!X3 | X1, X2)
+(How are you supposed to work this out?)
+
+
+
 ====
 #3
 
