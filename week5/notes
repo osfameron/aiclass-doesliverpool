@@ -1,0 +1,127 @@
+
+
+P(R|R) = 0.6
+P(S|R) = 0.4
+
+P(R|S) = 0.2
+P(S|S) = 0.8
+
+P(R0) = 1
+
+P(R1) = 0.6
+P(R2) = (0.6 * 0.6) + (0.4 * 0.2)
+        = 0.36 + 0.08 = 0.44
+
+P(R3) = (0.44 * 0.6) + (0.56 * 0.2)
+    = 0.376
+
+----
+
+P(A|A) = 0.5
+P(B|A) = 0.5
+P(A|B) = 1
+
+P(A0) = 1
+P(A1) = 0.5
+P(A2) = (0.5 * 0.5) + (0.5 * 1) = 0.75
+P(A3) = (0.75 * 0.5) + (0.25 * 1) = 0.625
+
+P(A4) = (0.625 * 0.5) + (0.375 * 1)
+------
+
+Stationary Distribution. i.e. the limit where P(A) = P(A-1)
+
+P(A) = P(A|A-1)*(P(A-1) + P(A|B-1)*P(B-1)
+    
+  x  = P(A|A-1) * x    + P(A|B-1) * (1-x)
+
+P(R Inf) = x =  P(R|R-1) * x   +  P(R|S-1) * (1-x)
+
+           x =  0.6 * x     + 0.2 * (1-x)
+           x =  0.6x       + 0.2  -  0.2x
+
+           x - 0.6x + 0.2x  = 0.2
+           0.6x = 0.2
+           6x = 2
+           3x = 1
+           x = 1/3
+
+This is the "asymptote"
+This is only true of Ergodic Markov Chains (which is most of them)
+MArkov chains that "mix", ie. lose the specifics of initial distribution
+
+Laplace Question
+----------------
+
+LS(k) P(x) = count(x) + k
+             --------
+          N + k|x|   e.g. k for every class
+
+So, P(S|S) = 3 / 3
+    but with laplace smoothing it's (with k=1)
+        3 + 1       4
+        -----    =  --
+        3 + (2)     5
+
+    R(S|R) = 1/1
+    But...   1+1     2
+             ---  =  --
+             1+2     3
+
+Now, P(R0) = 1.  There's only 1 datapoint (but 2 classes) so
+        1 + 1
+        -----  = 2/3
+        1 + 2
+            
+HMM Happy Grumpy question
+=================
+
+P(R0) = 1
+Observe H1
+
+P(R1 | H1) ?
+     = P(H1 | R1) * P(R1)
+       ------------------
+            P(H1)
+
+     = 0.4 *  (1 * 0.6)              0.24
+       ----------------            = ---  =  0.4
+        (0.6 * 0.4) + (0.4 * 0.9)    0.6
+
+========
+MDP Review
+
+Value iteration:
+
+value function:
+    V^Policy (S) = E_of_policy [ Sum_t gamma^t R t | So=S ]
+
+    Run until convergence
+    V(s) <- [ max_over_a  gamma Sum_s' P(s'|s,a) V(s') + R(s)
+
+
+    0  0 77     100
+    0  X 58.6  -100 
+    0  0  0       0
+
+OK, did this in an Excel spreadsheet...
+
+Review 1 was OK.
+Review 2 was fine.
+
+Review 3.  Single convergence.  Using an excel calc, that's 95.
+But he suggests doing it with a piece of maths.
+
+So...
+
+ V(a4) <- [ max_over_a  1 *  Sum_s'  0.8*100  + 0.2 * s  -4 ]
+
+I have no idea, so entering 95, and watch video to see what the maths was...
+
+Aha, took sneaky peak: should've remembered this.
+
+x = 0.8*100 + 0.2*x  -4
+
+this invariance must hold true after convergence.
+
+So  0.8 x = 76  =>  x = 95

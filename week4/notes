@@ -1,0 +1,81 @@
+HW
+
+1.  T/F/?
+
+I don't think "?" is applicable at all, i.e. it's a red herring.
+
+a) (Smoke => Fire) <=> (Smoke V !Fire)
+
+If Smoke then Fire
+(but if !Smoke, then Fire or !Fire)
+
+so (!Smoke ^ Fire) is possible, which means (F V !T) which is F
+So the <=> fails, and the whole sentence cannot be true.
+
+(But is it "?"... after all, for some values it would be true.  However
+the whole statement is false)
+
+b) (Smoke => Fire) <=> (!Smoke => !Fire)
+(Smoke=F, Fire=T)  !<=> (T => F)
+False!
+
+c) (Smoke => Fire) <=> (!Fire => !Smoke)
+(T => T) <=> (F => F)   OK
+(F => F) <=> (T => T)   OK
+(F => T) <=> (F => T)   OK
+
+True!
+
+d) Big V Dumb V (Big => Dumb)
+
+F v F V (F => F)  OK
+T v T v (T => T)  OK
+T v F v (T => F)  OK
+F v T v (F => F)  OK
+
+Always true
+
+e) Big ^ Dumb <=> ! (!Big v !Dumb)
+
+T^T <=> !(F v F) = T
+T^F <=> !(F v T) = F
+F^F <=> !(T v T) = F
+
+Always true
+
+2)
+Correct, Incorrect, or not even a correct sentence:
+"Paris and Nice are both in France"
+
+  (Paris ^ Nice) is only valid for Boolean variables?
+    So... simply incorrect?  Or Error?
+    well, it's not an error, it just doesn't mean what the author thinks it means.
+
+"There is a country that borders Iran and Syria"
+C() is a country
+B() borders
+
+Exists c. C(c) ^ B(c,Iran) ^ B(c,Syria)   I think that's good
+Exists c. C(c) => B(c,Iran) ^ B(c,Syria)
+    This says that there is a c that, *if* it is a country, borders Iran & Syria
+    but as it doesn't specify that c *is* a country, isn't equivalent to 
+    Iran and Syria.
+
+"Two countries that border each other can't have the same map colour"
+
+forall x,y (C(x) ^ C(y) ^ B(x,y)) => !(MC(x) = MC(y))
+This is ok, and the arrow => is correct (as having different colours would
+NOT imply anything the other way round)
+
+forall x,y !C(x) v !C(y) v !B(x,y) v !(MC(x) = MC(y))
+
+  C(x), C(y), B(x,y) so...
+
+  !...... v (colour must be the same)
+
+  !C(x), .....
+
+  true v (colour not the same)
+  but we want *all* the LHS to be true.  This is just nonsense.:
+
+

@@ -1,0 +1,158 @@
+I've already forgotten my conditional probability.  Gah.
+
+#7  Bayes network.
+
+P(B|C)
+
+First we need P(A|C)
+
+P(A|C) = P(C|A) * P(A)
+         ------------
+              P(C)
+
+       = 0.8 * 0.5                 0.4
+         ---------          =    -------     = 4/6 = 2/3
+       0.8*0.5 + 0.4*0.5         0.4 +  0.2
+
+P(B|A) = 0.2
+
+so P(B|C) = 0.2 * 2/3 = 2/15
+
+P(C|B) = P(B|C) * P(C)     2/15  *  0.6                  2/25
+         -------------  =  ------------             =   -----   =  2/5
+            P(B)            0.2*0.5 + 0.2*0.5            0.2
+
+Double check...
+
+C(A|B) = 0.2 * 0.5                    0.1
+         ---------              =     ---    = 1/2
+           P(B) = 0.1 + 0.1           0.2
+
+so P(C|B) = 0.8 * 1/2 = 2/5
+P(B|C) = 2/5 * P(B)    2/5 * (0.2*0.5 + 0.2*0.5)    0.4 * 0.2      8/100
+         ---------  =  -------------------        = ----------  =  ---------
+            P(C)        0.8*0.5 + 0.4*0.5          0.4 + 0.2        6/10
+
+            = 2/15
+
+#8 Naive Bayes with Laplacian Smoothing
+
+Top     . . .
+Gun     . .
+Shy     . .
+People  .
+Hat     .
+Gear    .
+
+6 words.  10 word uses.
+5 films.
+P(OLD) 3+k
+       ---  = 4/7
+       5+2k
+
+P("Top" | OLD) = 2+k
+                 ---
+                 6+6k (6 words in OLD + 6 words in dictionary) = 3/12 = 1/4
+
+P(OLD|"Top") = P("Top"|OLD) * P(OLD)   1/3  *  4/7
+               --------------------- = ------------
+                P("Top")                   P("Top")
+
+And P("Top") = 3+k       4
+               ---    =  --  = 1/4
+               10+6k     16
+
+so P(OLD|"Top") = 1/4 * 4/7
+                 -----------   =  4/7
+                    1/4
+
+Let's check P(NEW|"Top")
+
+= P("Top"|NEW) * P(NEW)     
+   -----------------      
+    P("Top")
+
+    P("Top"|NEW) = 1+k/4+6k = 2/10 = 1/5
+
+    So = 1/5 * 3/7
+         ---------
+            1/4
+
+P("Top) = P(NEW) * PTop|NEW = 3/7 * 1/5
+                                  +
+          P(OLD) * PTop|OLD   4/7 * 1/4
+          
+          = 8/35
+
+If we plug in P("Top") = 8/35 instead, then the values resolve to
+
+    P(OLD|Top) = 5/8
+    P(NEW|Top) = 3/8
+
+    which might be more reasonable... (so why is the naive 1/4 over both
+    buckets no good?  interesting!)
+
+#10 Linear Regression
+f(x) = w1 X + w0
+Minimizing quadratic loss
+
+   W0 = 1/M * Sum Yi  - W1/M * Sum Xi
+
+   W1 =    M * Sum (Xi*Yi) -   Sum Xi * Sum Yi
+           ----------------------------------
+           M * Sum Xi^2  - (Sum Xi)^2
+
+1     2
+3   5.2
+4   6.8
+5   8.4
+9  14.8
+
+W1 = 5 * 220  -   22 * 37.2
+     ----------------------
+     5 * 132     -  484
+
+   =  1100  -  818.4        281.6
+      ---------------   =   -----  = 1.6
+      660   -  484          176
+
+   W0 = 1/M * Sum Yi  - W1/M * Sum Xi
+
+      = 1/5 * 37.2   -   (1.6/5) * 22
+      = 7.44 - 7.04 - 0.4
+
+And it didn't need any fucking quadratic minimization anyway.
+
+#12  Logic
+
+(A=>B) ^ (B=>C) ^ (C=>A)
+
+A    =>  B      =>   C     => A     
+true     true        true    true   OK
+false    true        true    true    X
+false    false       false   false   OK
+                             true     X
+                     true    true     X
+                so, satisfiable
+
+A    =>  B      
+true     true  
+false    true 
+false    false
+
+A      !A    v  B         (!AvB)   !(!AvB)
+true   false    false     false      true
+true   false    true      true       false
+false  true     false     true       false
+false  true     true      true       false
+
+All the A=>B values end up with !(!AvB) as false, so the anded expression
+is unsatisfiable.
+
+
+A    =>  B        =>  C
+true     true       true     ok, A=>C
+false    true       true     I think this is valid
+false    false      false    THOUGH... does the <=> link worry about
+false    false      true     the B variable getting created out of
+                             nowhere?
